@@ -1,9 +1,10 @@
 import 'package:firebase_connection/authentication/signup_screen.dart';
-import 'package:firebase_connection/home/HomeScreen.dart';
 import 'package:firebase_connection/home/home_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'forgot_password_screen.dart'; // Import the new screen
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,50 +12,65 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _auth = FirebaseAuth.instance;
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Login',style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.blue, // Set your preferred color
       ),
+      backgroundColor: Colors.white, // Set your preferred background color
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Logo (Replace 'lib/Images/Logo.jpg' with the actual path to your image)
+            Image.asset(
+              'lib/Images/Logo.jpg',
+              height: 50, // Adjust the height as needed
+            ),
+            SizedBox(height: 50),
+
             // Email Textfield
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  ),
                 labelText: 'Email',
                 hintText: 'Enter your email',
               ),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 8),
 
-            // Password Textfield
+            // Password Textfield with peek feature
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                  ),
                 labelText: 'Password',
                 hintText: 'Enter your password',
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.remove_red_eye),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  },
+                ),
               ),
-              obscureText: true,
+              obscureText: !_passwordVisible,
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 16),
 
             // Login Button
             ElevatedButton(
@@ -71,30 +87,54 @@ class _LoginScreenState extends State<LoginScreen> {
                     password: password,
                   );
 
-                  // Save uid to shared preferences
-                  saveUidToSharedPreferences(userCredential.user!.uid);
+                   saveUidToSharedPreferences(userCredential.user!.uid);
 
                   // Navigate to the home screen on successful login
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => HomePage(userCredential.user!.uid)),
                   );
+
+                  // Show a success message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Login successful!'),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
                 } catch (e) {
-                  // Handle login errors (show an error message, etc.)
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Incorrect email or password. Please try again.'),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
                   print("Error during login: $e");
-                  // You can display a user-friendly error message to the user
-                  // using a Snackbar, AlertDialog, or any other appropriate method.
                 }
               },
-              child: Text('Login'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blue, // Set your preferred color
+              ),
+              child: Text(
+                'Login',
+                style: TextStyle(color: Colors.white), // Set your preferred text color
+              ),
             ),
 
-            // Optional: Forgot Password
+            // Forgot Password Button
             TextButton(
               onPressed: () {
-                // Implement your forgot password logic here
+                // Navigate to the Forgot Password screen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgotPasswordScreen()),
+                );
               },
-              child: Text('Forgot Password?'),
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(color: Colors.blue), // Set your preferred text color
+              ),
             ),
 
             // Sign Up Link
@@ -105,12 +145,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   MaterialPageRoute(builder: (context) => SignUpScreen()),
                 );
               },
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
                   'Don\'t have an account? Sign up',
                   style: TextStyle(
-                    color: Colors.blue, // Change color as needed
+                    color: Colors.blue, // Set your preferred text color
                     decoration: TextDecoration.underline,
                   ),
                 ),
@@ -122,15 +162,18 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+
   void saveUidToSharedPreferences(String uid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('uid', uid);
   }
-
+  
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
+  bool _passwordVisible = false;
 }

@@ -43,10 +43,28 @@ class CategoryDataState extends State<CategoryData> {
               height: 100,
               child: Card(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(documentSnapshot["title"]),
-                    Text(documentSnapshot["location"]),
+                     Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.teal, width: 2.0)),
+                                child: ClipOval(
+                                    child: Image.network(
+                                  documentSnapshot["imageUrl"] == null
+                                      ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                                      : documentSnapshot["imageUrl"],
+                                  fit: BoxFit.cover,
+                                )),
+                              ),
+                              Text(
+                                documentSnapshot["title"],
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              Text(documentSnapshot["location"]),
                   ],
                 ),
               ),

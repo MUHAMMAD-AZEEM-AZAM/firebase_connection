@@ -69,7 +69,7 @@ class MyCard extends StatelessWidget {
         SizedBox(height: 4.0),
         Text(
           title,
-          style: TextStyle(fontSize: 8.0),
+          style: TextStyle(fontSize: 12.0),
         ),
       ],
     ),
