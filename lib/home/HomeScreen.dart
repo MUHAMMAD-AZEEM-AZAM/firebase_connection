@@ -130,9 +130,21 @@ class HomeState extends State<Home> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                               Container(
+                                width: 80,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        color: Colors.teal, width: 2.0)),
+                                child: ClipOval(
+                                    child: Image.network(
+                                  documentSnapshot["imageUrl"]==null?'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1':documentSnapshot["imageUrl"],
+                                  fit: BoxFit.cover,
+                                )),
+                              ),
                               Text(documentSnapshot["title"]),
                               Text(documentSnapshot["location"]),
-                              Text(documentSnapshot["category"]),
                             ],
                           ),
                         ),
