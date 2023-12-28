@@ -28,38 +28,38 @@ class ProfileState extends State<Profile> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Future<void> addProfile() async {
-  await getUserID(); // Wait for getUserID to complete
+    await getUserID(); // Wait for getUserID to complete
 
-  if (formKey.currentState!.validate()) {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("profile").doc(userID);
+    if (formKey.currentState!.validate()) {
+      DocumentReference documentReference =
+          FirebaseFirestore.instance.collection("profile").doc(userID);
 
-    print(userID);
+      print(userID);
 
-    Map<String, dynamic> event = {
-      "name": name,
-      "phoneNumber": phoneNumber,
-      "eventCount": eventCount,
-      "location": location,
-      "DOB": dob,
-      "joinCount": joinCount,
-      "userName": userID,
-    };
+      Map<String, dynamic> event = {
+        "name": name,
+        "phoneNumber": phoneNumber,
+        "eventCount": eventCount,
+        "location": location,
+        "DOB": dob,
+        "joinCount": joinCount,
+        "userName": userID,
+      };
 
-    documentReference.set(event).whenComplete(() {
-      print("$name created");
+      documentReference.set(event).whenComplete(() {
+        print("$name created");
 
-      // Clear text fields after data is added
-      nameController.clear();
-      phoneNumberController.clear();
-      locationController.clear();
-      dobController.clear();
+        // Clear text fields after data is added
+        nameController.clear();
+        phoneNumberController.clear();
+        locationController.clear();
+        dobController.clear();
 
-      // Optionally, you can also reset other state variables if needed
-      setState(() {});
-    });
+        // Optionally, you can also reset other state variables if needed
+        setState(() {});
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,12 @@ class ProfileState extends State<Profile> {
                 Padding(
                   padding: const EdgeInsets.only(left: 50, right: 50),
                   child: ElevatedButton(
-                    onPressed: () => addProfile(),
+                    onPressed: () {
+                      addProfile();
+                      Navigator.pop(context);
+                      Navigator.pop(context); // Go back to the previous screen
+                      Navigator.pop(context); // Go back to the previous screen (SignUpScreen)
+                    },
                     child: const Text('Add User Profile'),
                   ),
                 )

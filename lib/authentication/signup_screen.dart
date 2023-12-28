@@ -1,5 +1,7 @@
+import 'package:firebase_connection/user/userProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -119,18 +121,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     email: email,
                     password: password,
                   );
+                  
+                   saveUidToSharedPreferences(userCredential.user!.uid);
 
                   // Show a dialog with an option to go back to the login screen
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('Registration Successful'),
-                      content: Text('You can now go back to the login screen.'),
+                      title: Text('SignUp Successful'),
+                      content: Text('Register Now'),
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.pop(context); // Close the dialog
-                            Navigator.pop(context); // Go back to the previous screen (SignUpScreen)
+                            // Navigator.pop(context); // Close the dialog
+                            // Navigator.pop(context); // Go back to the previous screen (SignUpScreen)
+                             Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Profile()),
+                );
                           },
                           child: Text('OK'),
                         ),
@@ -173,6 +181,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
+  }
+
+    void saveUidToSharedPreferences(String uid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('uid', uid);
   }
 
   @override
