@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_connection/event/EventDetail.dart';
 import 'package:flutter/material.dart';
 
 class CategoryData extends StatefulWidget {
@@ -39,33 +40,42 @@ class CategoryDataState extends State<CategoryData> {
           itemBuilder: (context, index) {
             DocumentSnapshot documentSnapshot = filteredItems[index];
 
-            return Container(
-              height: 100,
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                     Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.teal, width: 2.0)),
-                                child: ClipOval(
-                                    child: Image.network(
-                                  documentSnapshot["imageUrl"] == null
-                                      ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                                      : documentSnapshot["imageUrl"],
-                                  fit: BoxFit.cover,
-                                )),
-                              ),
-                              Text(
-                                documentSnapshot["title"],
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                              Text(documentSnapshot["location"]),
-                  ],
+            return GestureDetector(
+               onTap: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EventDetail(documentSnapshot: documentSnapshot)),
+                        );
+                      },
+              child: Container(
+                height: 100,
+                child: Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                       Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          color: Colors.teal, width: 2.0)),
+                                  child: ClipOval(
+                                      child: Image.network(
+                                    documentSnapshot["imageUrl"] == null
+                                        ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                                        : documentSnapshot["imageUrl"],
+                                    fit: BoxFit.cover,
+                                  )),
+                                ),
+                                Text(
+                                  documentSnapshot["title"],
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                                Text(documentSnapshot["location"]),
+                    ],
+                  ),
                 ),
               ),
             );
