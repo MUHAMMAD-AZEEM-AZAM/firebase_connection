@@ -49,22 +49,32 @@ class MyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            size: 20.0,
-            color: const Color.fromARGB(255, 0, 42, 77),
-          ),
-          SizedBox(height: 4.0),
-          Text(
-            title,
-            style: TextStyle(fontSize: 8.0),
-          ),
-        ],
-      ),
-    );
+  elevation: 3.0,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(15.0),
+  ),
+  child: Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          size: 20.0,
+          color: const Color.fromARGB(255, 0, 42, 77),
+        ),
+        SizedBox(height: 4.0),
+        Text(
+          title,
+          style: TextStyle(fontSize: 8.0),
+        ),
+      ],
+    ),
+  ),
+);
+
   }
 }

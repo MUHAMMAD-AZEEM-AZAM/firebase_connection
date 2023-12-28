@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//git remote add origin https://github.com/MUHAMMAD-AZEEM-AZAM/firebase_connection.git
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -16,7 +18,6 @@ void main() async {
   );
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(cardColor: Colors.white),
       title: 'Crowd Connect',
       home: Scaffold(body: MyApp())));
 }
@@ -39,7 +40,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Add a 2-second delay before checking shared preferences
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 2), () {
       checkLoggedInUser(context);
     });
 

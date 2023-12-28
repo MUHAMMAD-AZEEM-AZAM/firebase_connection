@@ -116,16 +116,25 @@ class HomeState extends State<Home> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot documentSnapshot =
                         snapshot.data!.docs[index];
-                    return Container(
-                      height: 100,
-                      child: Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(documentSnapshot["title"]),
-                            Text(documentSnapshot["location"]),
-                            Text(documentSnapshot["category"]),
-                          ],
+                    return Card(
+                      elevation: 3.0,
+                      child: Container(
+                        height: 100, // Set the container height to 100
+                        width: 100, // Set the container width to 100
+                        decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(documentSnapshot["title"]),
+                              Text(documentSnapshot["location"]),
+                              Text(documentSnapshot["category"]),
+                            ],
+                          ),
                         ),
                       ),
                     );
