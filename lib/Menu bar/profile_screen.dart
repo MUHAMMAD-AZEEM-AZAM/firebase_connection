@@ -32,8 +32,10 @@ class ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> storeProfileDataInSharedPreferences() async {
     String? userID = await getUserID();
-    DocumentSnapshot profileData =
-        await FirebaseFirestore.instance.collection("profile").doc(userID).get();
+    DocumentSnapshot profileData = await FirebaseFirestore.instance
+        .collection("profile")
+        .doc(userID)
+        .get();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -53,7 +55,10 @@ class ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Profile'),
+        title: const Text(
+          'User Profile',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: Center(
