@@ -1,3 +1,4 @@
+import 'package:firebase_connection/SharedPref.dart';
 import 'package:firebase_connection/authentication/login_screen.dart';
 import 'package:firebase_connection/event/event.dart';
 import 'package:firebase_connection/firebase_options.dart';
@@ -8,14 +9,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_connection/myGlobals.dart';
 
 //git remote add origin https://github.com/MUHAMMAD-AZEEM-AZAM/firebase_connection.git
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  SharedPreferencesService prefsService =
+      await SharedPreferencesService.getInstance();
+  userID = prefsService.userID;
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Crowd Connect',
@@ -64,7 +70,9 @@ class SplashScreen extends StatelessWidget {
 
   Future<void> checkLoggedInUser(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uid = prefs.getString('uid');
+    // String? uid = prefs.getString('uid');
+    String? uid = userID;
+    print(uid);
 
     if (uid != null) {
       // User is already logged in, navigate to the home screen

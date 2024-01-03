@@ -11,8 +11,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  String? userName = "Muhammad Azeem";
-  int? attendEvents = 10;
+  String? userName='' ;
+  int? attendEvents=0;
 
   @override
   void initState() {
@@ -43,9 +43,9 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0), // Adjust the preferred height
+        preferredSize: const Size.fromHeight(80.0), // Adjust the preferred height
         child: AppBar(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
@@ -66,7 +66,7 @@ class HomeState extends State<Home> {
                       color: Colors.white,
                       size: 24, // Adjust the icon size
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5, // Adjust the space between icon and text
                     ),
                     Text(
@@ -95,7 +95,7 @@ class HomeState extends State<Home> {
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Container(
+            child: SizedBox(
               height: 250,
               child: Center(
                 child: MyGridView(),
@@ -109,18 +109,18 @@ class HomeState extends State<Home> {
             child: MySlider(),
           ),
 
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
 
-          Center(
+          const Center(
             child: Text(
               "All Events",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
 
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
 
@@ -133,7 +133,7 @@ class HomeState extends State<Home> {
                   shrinkWrap:
                       true, // Important to make it work within a ListView
                   physics:
-                      NeverScrollableScrollPhysics(), // Disable GridView scrolling
+                      const NeverScrollableScrollPhysics(), // Disable GridView scrolling
                   padding: EdgeInsets.zero,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, // Number of columns in the grid
@@ -155,7 +155,6 @@ class HomeState extends State<Home> {
                       child: Card(
                         elevation: 3.0,
                         child: Container(
-                          height: 100, // Set the container height to 100
                           width: 100, // Set the container width to 100
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -175,15 +174,13 @@ class HomeState extends State<Home> {
                                           color: Colors.teal, width: 2.0)),
                                   child: ClipOval(
                                       child: Image.network(
-                                    documentSnapshot["imageUrl"] == null
-                                        ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                                        : documentSnapshot["imageUrl"],
+                                    documentSnapshot["imageUrl"] ?? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                                     fit: BoxFit.cover,
                                   )),
                                 ),
                                 Text(
                                   documentSnapshot["title"],
-                                  style: TextStyle(color: Colors.blue),
+                                  style: const TextStyle(color: Colors.blue),
                                 ),
                                 Text(documentSnapshot["location"]),
                               ],

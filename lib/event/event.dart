@@ -52,40 +52,57 @@ class EventState extends State<Event> {
     }
   }
 
-  Future<void> addEvent() async {
-    await getUserID();
+ Future<void> addEvent() async {
+  await getUserID();
 
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("event").doc();
+  DocumentReference documentReference =
+      FirebaseFirestore.instance.collection("event").doc();
 
-    Map<String, dynamic> event = {
-      "title": title,
-      "detail": detail,
-      "category": category,
-      "location": location,
-      "date": dateTime,
-      "entryFee": entryFee,
-      "userID": userID,
-      "imageUrl": imageUrl, // Added imageUrl to the event data
-    };
+  // Retrieve the event ID
+  String eventId = documentReference.id;
 
-    documentReference.set(event).whenComplete(() {
-      print("$title created");
+  Map<String, dynamic> event = {
+    "title": title,
+    "detail": detail,
+    "category": category,
+    "location": location,
+    "date": dateTime,
+    "entryFee": entryFee,
+    "userID": userID,
+    "imageUrl": imageUrl,
+  };
 
-      // Clear text fields after data is added
-      titleController.clear();
-      detailController.clear();
-      locationController.clear();
-      entryFeeController.clear();
+  // Set the event data in the "event" collection
+  await documentReference.set(event).then((_) async {
+    print("$title created");
 
-      // Optionally, you can also reset other state variables if needed
-      setState(() {
-        category = 'Select Category';
-        dateTime = null;
-        imageUrl = null; // Clear imageUrl after adding event
-      });
+    // Now create a corresponding document in the "eventJoined" collection with the same ID
+    DocumentReference documentReference1 =
+        FirebaseFirestore.instance.collection("eventJoined").doc(eventId);
+
+    // Set the user ID in the "eventJoined" document or create it if it doesn't exist
+    await documentReference1.set(
+      {"userID": FieldValue.arrayUnion([userID])},
+      SetOptions(merge: true), // Use merge option to create if document doesn't exist
+    );
+
+    // Clear text fields after data is added
+    titleController.clear();
+    detailController.clear();
+    locationController.clear();
+    entryFeeController.clear();
+
+    // Optionally, you can also reset other state variables if needed
+    setState(() {
+      category = 'Select Category';
+      dateTime = null;
+      imageUrl = null;
     });
-  }
+  }).catchError((error) {
+    print("Error creating event: $error");
+  });
+}
+
 
   Future<void> getUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

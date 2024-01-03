@@ -7,7 +7,7 @@ import 'package:firebase_connection/user/userProfile.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-final String userID;
+  final String userID;
   const HomePage(this.userID, {super.key});
 
   @override
@@ -15,8 +15,7 @@ final String userID;
 }
 
 class _HomePageState extends State<HomePage> {
-
-    String userID;
+  String userID;
   _HomePageState(this.userID);
   int _currentIndex = 0;
 
@@ -37,6 +36,7 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _currentIndex,
         onTap: (index) {
           if (index == _currentIndex) {
+            print('\nthis is user Id$userID\n');
             // If the same tab is tapped again (Home), simulate a refresh
             setState(() {});
           } else {
@@ -90,7 +90,8 @@ class _HomePageState extends State<HomePage> {
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
         type: BottomNavigationBarType.fixed, // Ensure all labels are visible
-        backgroundColor: Colors.white, // Background color of the BottomNavigationBar
+        backgroundColor:
+            Colors.white, // Background color of the BottomNavigationBar
         elevation: 5.0, // Elevation of the BottomNavigationBar
       ),
     );

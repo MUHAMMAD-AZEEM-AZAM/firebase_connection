@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_connection/user/dobPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_connection/main.dart';
+import 'package:firebase_connection/myGlobals.dart';
+
 
 class Profile extends StatefulWidget {
   @override
@@ -13,12 +16,11 @@ class ProfileState extends State<Profile> {
   int? eventCount = 0, joinCount = 0;
   DateTime? dob;
 
-  String? userID;
 
-  Future<void> getUserID() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    userID = prefs.getString('uid');
-  }
+  // Future<void> getUserID() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   userID = prefs.getString('uid');
+  // }
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
@@ -28,7 +30,7 @@ class ProfileState extends State<Profile> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Future<void> addProfile() async {
-    await getUserID(); // Wait for getUserID to complete
+    // await getUserID(); // Wait for getUserID to complete
 
     if (formKey.currentState!.validate()) {
       DocumentReference documentReference =

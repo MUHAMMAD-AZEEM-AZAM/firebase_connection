@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_connection/SharedPref.dart';
 import 'package:firebase_connection/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,14 +18,35 @@ class ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _userIDFuture = getUserID();
-    // print(_userIDFuture);
     _profileDataFuture = _userIDFuture.then((userID) =>
         FirebaseFirestore.instance.collection("profile").doc(userID).get());
+
+    // Fetch and store profile data in SharedPreferences when the screen is opened
+    storeProfileDataInSharedPreferences();
   }
 
   Future<String?> getUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('uid');
+  }
+
+  Future<void> storeProfileDataInSharedPreferences() async {
+    String? userID = await getUserID();
+    DocumentSnapshot profileData =
+        await FirebaseFirestore.instance.collection("profile").doc(userID).get();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Save the profile data in SharedPreferences
+    prefs.setString('uid', userID!);
+    prefs.setString('name', profileData['name']);
+    prefs.setString('dob', profileData['DOB']);
+    prefs.setString('eventCount', profileData['eventCount']);
+    prefs.setString('joinCount', profileData['joinCount']);
+    prefs.setString('location', profileData['location']);
+    prefs.setString('phoneNumber', profileData['phoneNumber']);
+    prefs.setString('userID', profileData['userName']);
+    // Add other fields as needed
   }
 
   @override
@@ -97,7 +119,8 @@ class ProfileScreenState extends State<ProfileScreen> {
                               Icon(
                                 Icons.cake,
                                 size: 50,
-                                color: Color.fromARGB(255, 179, 21, 0), // You can choose a color for the cake icon
+                                color: Color.fromARGB(255, 179, 21,
+                                    0), // You can choose a color for the cake icon
                               ),
                               const Text(
                                 'Date of Birth ',

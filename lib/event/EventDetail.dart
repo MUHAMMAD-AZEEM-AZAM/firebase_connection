@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventDetail extends StatelessWidget {
   final DocumentSnapshot documentSnapshot;
@@ -10,13 +11,20 @@ class EventDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get userId from SharedPreferences
+    Future<String?> getUserId() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString('uid');
+    }
+
     String imageUrl = documentSnapshot["imageUrl"] ??
         "https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
     String title = documentSnapshot["title"] ?? "";
     String location = documentSnapshot["location"] ?? "";
     String detail = documentSnapshot["detail"] ?? "";
-    int fee = documentSnapshot["entryFee"] ?? "";
-    String date = DateFormat('dd-MM-yyyy At HH:mm').format(documentSnapshot['date'].toDate());
+    int fee = documentSnapshot["entryFee"] ?? 0;
+    String date = DateFormat('dd-MM-yyyy At HH:mm')
+        .format(documentSnapshot['date'].toDate());
 
     return Scaffold(
       appBar: AppBar(
@@ -73,10 +81,11 @@ class EventDetail extends StatelessWidget {
                         ),
                         Text(
                           "$location",
-                          style: TextStyle(fontSize: 18,),
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
                         ),
                         SizedBox(height: 10),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -101,7 +110,28 @@ class EventDetail extends StatelessWidget {
                             backgroundColor: Colors.blue,
                             foregroundColor: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            // Get userId from SharedPreferences
+                            String? newUserId = await getUserId();
+
+                            // Check if newUserId is not null before proceeding
+                            if (newUserId != null) {
+                              DocumentReference documentReference =
+                                  FirebaseFirestore.instance
+                                      .collection("eventJoined")
+                                      .doc(documentSnapshot.id);
+
+                              documentReference.update({
+                                "userID": FieldValue.arrayUnion([newUserId]),
+                              }).then((_) {
+                                print("Value added to the array in Firestore");
+                              }).catchError((error) {
+                                print("Error adding value to array: $error");
+                              });
+                            } else {
+                              print("Error: User ID is null");
+                            }
+                          },
                           child: Text(
                               fee == 0 ? 'Join Free' : 'Join with ${fee} Rs'),
                         ),
