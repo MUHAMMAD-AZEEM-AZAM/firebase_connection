@@ -11,44 +11,19 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class ProfileScreenState extends State<ProfileScreen> {
-  late Future<String?> _userIDFuture;
   late Future<DocumentSnapshot> _profileDataFuture;
 
   @override
   void initState() {
     super.initState();
-    _userIDFuture = getUserID();
-    _profileDataFuture = _userIDFuture.then((userID) =>
-        FirebaseFirestore.instance.collection("profile").doc(userID).get());
-
-    // Fetch and store profile data in SharedPreferences when the screen is opened
-    storeProfileDataInSharedPreferences();
+    _profileDataFuture = fetchProfileData();
   }
 
-  Future<String?> getUserID() async {
+  Future<DocumentSnapshot> fetchProfileData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('uid');
-  }
+    String? userID = prefs.getString('uid') ?? "";
 
-  Future<void> storeProfileDataInSharedPreferences() async {
-    String? userID = await getUserID();
-    DocumentSnapshot profileData = await FirebaseFirestore.instance
-        .collection("profile")
-        .doc(userID)
-        .get();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // Save the profile data in SharedPreferences
-    prefs.setString('uid', userID!);
-    prefs.setString('name', profileData['name']);
-    prefs.setString('dob', profileData['DOB']);
-    prefs.setString('eventCount', profileData['eventCount']);
-    prefs.setString('joinCount', profileData['joinCount']);
-    prefs.setString('location', profileData['location']);
-    prefs.setString('phoneNumber', profileData['phoneNumber']);
-    prefs.setString('userID', profileData['userName']);
-    // Add other fields as needed
+    return FirebaseFirestore.instance.collection("profile").doc(userID).get();
   }
 
   @override
@@ -65,7 +40,7 @@ class ProfileScreenState extends State<ProfileScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: FutureBuilder(
-            future: _profileDataFuture,
+            future: fetchProfileData(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -74,10 +49,9 @@ class ProfileScreenState extends State<ProfileScreen> {
               } else {
                 var profileData = snapshot.data as DocumentSnapshot;
                 return Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Create a card for the name with a large font size and a blue gradient background
                     Card(
+                      // Card for the name
                       color: Colors.transparent,
                       elevation: 3.0,
                       shape: RoundedRectangleBorder(
@@ -102,7 +76,7 @@ class ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                     const SizedBox(height: 8),
                     // Create a card for the date of birth with a small font size and a white background
                     Card(
                       color: Colors.transparent,
@@ -311,16 +285,15 @@ class ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
+                    
                     ElevatedButton(
+                      // Logout button
                       style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.blue, // Set the background color to blue
-                          foregroundColor: Colors
-                              .white, // Set the text and icon color to white
-                          maximumSize: const Size(150, 100),
-                          minimumSize: const Size(
-                              150, 60) // Set the minimum width to 150
-                          ),
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        maximumSize: const Size(150, 100),
+                        minimumSize: const Size(150, 60),
+                      ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -329,12 +302,10 @@ class ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       onPressed: () async {
-                        // Get the instance of shared preferences
+                        // Logout functionality
                         SharedPreferences preferences =
                             await SharedPreferences.getInstance();
-                        // Call the clear method to delete all the data
                         await preferences.clear();
-                        // Show a snackbar to confirm
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Logout'),

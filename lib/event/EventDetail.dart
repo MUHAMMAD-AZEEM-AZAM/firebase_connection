@@ -1,30 +1,67 @@
+import 'package:firebase_connection/myGlobals.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class EventDetail extends StatelessWidget {
+class EventDetail extends StatefulWidget {
   final DocumentSnapshot documentSnapshot;
 
   // Constructor to receive the DocumentSnapshot object
   EventDetail({required this.documentSnapshot});
 
   @override
-  Widget build(BuildContext context) {
-    // Get userId from SharedPreferences
-    Future<String?> getUserId() async {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      return prefs.getString('uid');
-    }
+  _EventDetailState createState() => _EventDetailState();
+}
 
-    String imageUrl = documentSnapshot["imageUrl"] ??
+class _EventDetailState extends State<EventDetail> {
+  bool joined = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfUserJoined();
+  }
+
+  // Check if the user has already joined the event
+  Future<void> checkIfUserJoined() async {
+    String? newUserId = await getUserId();
+
+    if (newUserId != null) {
+      DocumentReference documentReference = FirebaseFirestore.instance
+          .collection("eventJoined")
+          .doc(widget.documentSnapshot.id);
+
+      DocumentSnapshot documentSnapshot = await documentReference.get();
+
+      List<dynamic>? userIds = (documentSnapshot.data()
+          as Map<String, dynamic>?)?["userID"] as List<dynamic>?;
+
+      if (userIds != null && userIds.contains(newUserId)) {
+        setState(() {
+          joined = true;
+        });
+      }
+    }
+  }
+
+  // Get userId from SharedPreferences
+  Future<String?> getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('uid');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String id = widget.documentSnapshot.id;
+    String imageUrl = widget.documentSnapshot["imageUrl"] ??
         "https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
-    String title = documentSnapshot["title"] ?? "";
-    String location = documentSnapshot["location"] ?? "";
-    String detail = documentSnapshot["detail"] ?? "";
-    int fee = documentSnapshot["entryFee"] ?? 0;
+    String title = widget.documentSnapshot["title"] ?? "";
+    String location = widget.documentSnapshot["location"] ?? "";
+    String detail = widget.documentSnapshot["detail"] ?? "";
+    int fee = widget.documentSnapshot["entryFee"] ?? 0;
     String date = DateFormat('dd-MM-yyyy At HH:mm')
-        .format(documentSnapshot['date'].toDate());
+        .format(widget.documentSnapshot['date'].toDate());
 
     return Scaffold(
       appBar: AppBar(
@@ -107,10 +144,24 @@ class EventDetail extends StatelessWidget {
                         SizedBox(height: 10),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
+                            backgroundColor:
+                                joined ? Colors.white : Colors.blue,
+                            foregroundColor:
+                                joined ? Colors.black : Colors.white,
                           ),
                           onPressed: () async {
+                            // Check if already joined
+                            if (joined) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "You have already joined this event."),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              return;
+                            }
+
                             // Get userId from SharedPreferences
                             String? newUserId = await getUserId();
 
@@ -119,21 +170,55 @@ class EventDetail extends StatelessWidget {
                               DocumentReference documentReference =
                                   FirebaseFirestore.instance
                                       .collection("eventJoined")
-                                      .doc(documentSnapshot.id);
+                                      .doc(id);
 
-                              documentReference.update({
-                                "userID": FieldValue.arrayUnion([newUserId]),
-                              }).then((_) {
-                                print("Value added to the array in Firestore");
-                              }).catchError((error) {
-                                print("Error adding value to array: $error");
+                              // Check if the document already exists
+                              DocumentSnapshot documentSnapshot =
+                                  await documentReference.get();
+
+                              if (documentSnapshot.exists) {
+                                // If the document exists, update the array
+                                await documentReference.update({
+                                  "userID": FieldValue.arrayUnion([newUserId]),
+                                });
+                              } else {
+                                // If the document doesn't exist, create a new one
+                                await documentReference.set({
+                                  "userID": [newUserId],
+                                });
+                              }
+
+                              setState(() {
+                                joined = true;
+                              });
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("You have joined the event."),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                              print("Value added to the array in Firestore");
+                              // Increment joinCount in the user's profile document
+                              DocumentReference profileReference =
+                                  FirebaseFirestore.instance
+                                      .collection("profile")
+                                      .doc(newUserId);
+
+                              profileReference.update({
+                                "joinCount": FieldValue.increment(1),
                               });
                             } else {
                               print("Error: User ID is null");
                             }
                           },
                           child: Text(
-                              fee == 0 ? 'Join Free' : 'Join with ${fee} Rs'),
+                            joined
+                                ? 'Joined'
+                                : (fee == 0
+                                    ? 'Join Free'
+                                    : 'Join with ${fee} Rs'),
+                          ),
                         ),
                         SizedBox(height: 10),
                       ],

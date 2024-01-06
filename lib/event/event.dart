@@ -77,14 +77,14 @@ class EventState extends State<Event> {
     print("$title created");
 
     // Now create a corresponding document in the "eventJoined" collection with the same ID
-    DocumentReference documentReference1 =
-        FirebaseFirestore.instance.collection("eventJoined").doc(eventId);
+    // DocumentReference documentReference1 =
+    //     FirebaseFirestore.instance.collection("eventJoined").doc(eventId);
 
-    // Set the user ID in the "eventJoined" document or create it if it doesn't exist
-    await documentReference1.set(
-      {"userID": FieldValue.arrayUnion([userID])},
-      SetOptions(merge: true), // Use merge option to create if document doesn't exist
-    );
+    // // Set the user ID in the "eventJoined" document or create it if it doesn't exist
+    // await documentReference1.set(
+    //   {"userID": FieldValue.arrayUnion([userID])},
+    //   SetOptions(merge: true), // Use merge option to create if document doesn't exist
+    // );
 
     // Clear text fields after data is added
     titleController.clear();

@@ -3,8 +3,7 @@ import 'package:firebase_connection/user/dobPicker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_connection/main.dart';
-import 'package:firebase_connection/myGlobals.dart';
-
+// import 'package:firebase_connection/myGlobals.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -15,12 +14,12 @@ class ProfileState extends State<Profile> {
   String? name, phoneNumber, location, userName;
   int? eventCount = 0, joinCount = 0;
   DateTime? dob;
+  String? userID;
 
-
-  // Future<void> getUserID() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   userID = prefs.getString('uid');
-  // }
+  Future<void> getUserID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userID = prefs.getString('uid');
+  }
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
@@ -36,7 +35,7 @@ class ProfileState extends State<Profile> {
       DocumentReference documentReference =
           FirebaseFirestore.instance.collection("profile").doc(userID);
 
-      print(userID);
+      // print(userID);
 
       Map<String, dynamic> event = {
         "name": name,
@@ -176,7 +175,8 @@ class ProfileState extends State<Profile> {
                       addProfile();
                       Navigator.pop(context);
                       Navigator.pop(context); // Go back to the previous screen
-                      Navigator.pop(context); // Go back to the previous screen (SignUpScreen)
+                      Navigator.pop(
+                          context); // Go back to the previous screen (SignUpScreen)
                     },
                     child: const Text('Add User Profile'),
                   ),

@@ -73,7 +73,8 @@ class CreatedScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => JoinedRequest(
-                                          eventId: '${documentSnapshot.id}',)));
+                                              eventId: '${documentSnapshot.id}',
+                                            )));
                               },
                               child: Container(
                                 height: 100,

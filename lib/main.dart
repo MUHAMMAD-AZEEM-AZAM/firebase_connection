@@ -70,8 +70,8 @@ class SplashScreen extends StatelessWidget {
 
   Future<void> checkLoggedInUser(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // String? uid = prefs.getString('uid');
-    String? uid = userID;
+    String? uid = prefs.getString('uid');
+    // String? uid = userID;
     print(uid);
 
     if (uid != null) {

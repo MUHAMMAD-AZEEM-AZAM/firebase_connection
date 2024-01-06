@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_connection/event/EventDetail.dart';
 import 'package:firebase_connection/home/HomeCategory.dart';
 import 'package:firebase_connection/home/Slider.dart';
+import 'package:firebase_connection/myGlobals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,8 +12,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  String? userName='' ;
-  int? attendEvents=0;
+  String? userName = '';
+  int? attendEvents = 0;
 
   @override
   void initState() {
@@ -23,7 +24,8 @@ class HomeState extends State<Home> {
 
   Future<void> _fetchUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? userId = prefs.getString('uid');
+    String? userId =await prefs.getString('uid');
+    // String? userId = userID;
 
     // If userId is available, fetch user data from Firestore
     if (userId != null) {
@@ -43,7 +45,8 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0), // Adjust the preferred height
+        preferredSize:
+            const Size.fromHeight(80.0), // Adjust the preferred height
         child: AppBar(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -145,11 +148,12 @@ class HomeState extends State<Home> {
                     DocumentSnapshot documentSnapshot =
                         snapshot.data!.docs[index];
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EventDetail(documentSnapshot: documentSnapshot)),
+                              builder: (context) => EventDetail(
+                                  documentSnapshot: documentSnapshot)),
                         );
                       },
                       child: Card(
@@ -174,7 +178,8 @@ class HomeState extends State<Home> {
                                           color: Colors.teal, width: 2.0)),
                                   child: ClipOval(
                                       child: Image.network(
-                                    documentSnapshot["imageUrl"] ?? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                                    documentSnapshot["imageUrl"] ??
+                                        'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                                     fit: BoxFit.cover,
                                   )),
                                 ),
