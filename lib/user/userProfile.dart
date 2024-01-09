@@ -29,13 +29,13 @@ class ProfileState extends State<Profile> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   Future<void> addProfile() async {
-    // await getUserID(); // Wait for getUserID to complete
+    await getUserID(); // Wait for getUserID to complete
 
     if (formKey.currentState!.validate()) {
       DocumentReference documentReference =
           FirebaseFirestore.instance.collection("profile").doc(userID);
 
-      // print(userID);
+      print(userID);
 
       Map<String, dynamic> event = {
         "name": name,

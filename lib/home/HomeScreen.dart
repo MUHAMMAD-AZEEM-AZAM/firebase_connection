@@ -36,7 +36,7 @@ class HomeState extends State<Home> {
 
       setState(() {
         userName = userSnapshot["name"];
-        attendEvents = userSnapshot["eventCount"];
+        attendEvents = userSnapshot["joinCount"];
       });
     }
   }
@@ -83,7 +83,7 @@ class HomeState extends State<Home> {
                   ],
                 ),
                 Text(
-                  'Attend Event $attendEvents',
+                  'Joined Events $attendEvents',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 10, // Adjust the text size
@@ -184,10 +184,10 @@ class HomeState extends State<Home> {
                                   )),
                                 ),
                                 Text(
-                                  documentSnapshot["title"],
+                                  documentSnapshot["title"]??'N/A',
                                   style: const TextStyle(color: Colors.blue),
                                 ),
-                                Text(documentSnapshot["location"]),
+                                Expanded(child: Text(documentSnapshot["location"]??'N/A')),
                               ],
                             ),
                           ),

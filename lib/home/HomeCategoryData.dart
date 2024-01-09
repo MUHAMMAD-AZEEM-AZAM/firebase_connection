@@ -17,6 +17,11 @@ class CategoryDataState extends State<CategoryData> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text("Events",style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.blue,
+      ),
       body: StreamBuilder(
   stream: FirebaseFirestore.instance.collection("event").snapshots(),
   builder: (context, snapshot) {
@@ -48,9 +53,12 @@ class CategoryDataState extends State<CategoryData> {
                               builder: (context) => EventDetail(documentSnapshot: documentSnapshot)),
                         );
                       },
-              child: Container(
-                height: 100,
-                child: Card(
+              child: Card(
+                child: Container(
+                  decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -75,7 +83,7 @@ class CategoryDataState extends State<CategoryData> {
                                     documentSnapshot["title"],
                                     style: TextStyle(color: Colors.blue),
                                   ),
-                                  Text(documentSnapshot["location"]),
+                                  Expanded(child: Text(documentSnapshot["location"])),
                       ],
                     ),
                   ),

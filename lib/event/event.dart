@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_connection/Menu%20bar/created_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_connection/event/datePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Event extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class EventState extends State<Event> {
   int? entryFee;
   String category = 'Select Category';
   DateTime? dateTime;
-  String? imageUrl; // Added imageUrl to store the URL of the uploaded image
+  String? imageUrl;
   String? userID;
 
   TextEditingController titleController = TextEditingController();
@@ -24,7 +26,32 @@ class EventState extends State<Event> {
   TextEditingController locationController = TextEditingController();
   TextEditingController entryFeeController = TextEditingController();
 
-  // Function to pick an image from the device
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeLocalNotifications(context);
+  }
+
+Future<void> initializeLocalNotifications(BuildContext context) async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final InitializationSettings initializationSettings =
+      InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+   
+  );
+}
+
+
+
   Future<void> pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -33,14 +60,12 @@ class EventState extends State<Event> {
       var file = File(pickedFile.path);
 
       try {
-        // Upload the file to Firebase Storage
         var storageRef = firebase_storage.FirebaseStorage.instance
             .ref()
             .child('event_images/${DateTime.now()}.jpg');
 
         await storageRef.putFile(file);
 
-        // Get the download URL of the uploaded image
         imageUrl = await storageRef.getDownloadURL();
 
         print('Image uploaded successfully!');
@@ -52,61 +77,70 @@ class EventState extends State<Event> {
     }
   }
 
- Future<void> addEvent() async {
-  await getUserID();
+  Future<void> addEvent() async {
+    await getUserID();
 
-  DocumentReference documentReference =
-      FirebaseFirestore.instance.collection("event").doc();
+    DocumentReference documentReference =
+        FirebaseFirestore.instance.collection("event").doc();
 
-  // Retrieve the event ID
-  String eventId = documentReference.id;
+    String eventId = documentReference.id;
 
-  Map<String, dynamic> event = {
-    "title": title,
-    "detail": detail,
-    "category": category,
-    "location": location,
-    "date": dateTime,
-    "entryFee": entryFee,
-    "userID": userID,
-    "imageUrl": imageUrl,
-  };
+    Map<String, dynamic> event = {
+      "title": title,
+      "detail": detail,
+      "category": category,
+      "location": location,
+      "date": dateTime,
+      "entryFee": entryFee,
+      "userID": userID,
+      "imageUrl": imageUrl,
+    };
 
-  // Set the event data in the "event" collection
-  await documentReference.set(event).then((_) async {
-    print("$title created");
+    await documentReference.set(event).then((_) async {
+      print("$title created");
 
-    // Now create a corresponding document in the "eventJoined" collection with the same ID
-    // DocumentReference documentReference1 =
-    //     FirebaseFirestore.instance.collection("eventJoined").doc(eventId);
+      titleController.clear();
+      detailController.clear();
+      locationController.clear();
+      entryFeeController.clear();
 
-    // // Set the user ID in the "eventJoined" document or create it if it doesn't exist
-    // await documentReference1.set(
-    //   {"userID": FieldValue.arrayUnion([userID])},
-    //   SetOptions(merge: true), // Use merge option to create if document doesn't exist
-    // );
+      setState(() {
+        category = 'Select Category';
+        dateTime = null;
+        imageUrl = null;
+      });
 
-    // Clear text fields after data is added
-    titleController.clear();
-    detailController.clear();
-    locationController.clear();
-    entryFeeController.clear();
-
-    // Optionally, you can also reset other state variables if needed
-    setState(() {
-      category = 'Select Category';
-      dateTime = null;
-      imageUrl = null;
+      // Show local notification
+      showNotification('Your event "$title" has been posted');
+    }).catchError((error) {
+      print("Error creating event: $error");
     });
-  }).catchError((error) {
-    print("Error creating event: $error");
-  });
-}
-
+  }
 
   Future<void> getUserID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userID = prefs.getString('uid');
+  }
+
+  Future<void> showNotification(String message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id', // Replace with your channel ID
+      'your_channel_name', // Replace with your channel name
+       // Replace with your channel description
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Event Notification',
+      message,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
   }
 
   @override
@@ -115,10 +149,11 @@ class EventState extends State<Event> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Center(
-            child: const Text(
-          'Create Event',
-          style: TextStyle(color: Colors.white),
-        )),
+          child: const Text(
+            'Create Event',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
         backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
@@ -131,7 +166,7 @@ class EventState extends State<Event> {
                 child: InkWell(
                   onTap: () async {
                     await pickImage();
-                    setState(() {}); // Refresh UI after picking an image
+                    setState(() {});
                   },
                   child: imageUrl != null
                       ? ClipOval(
