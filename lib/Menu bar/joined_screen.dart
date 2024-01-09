@@ -26,7 +26,6 @@ class _JoinedScreenState extends State<JoinedScreen> {
           children: [
             // Card for "Events You Requested"
             Card(
-              elevation: 3,
               child: Container(
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 230, 246, 255),
@@ -108,7 +107,6 @@ class _JoinedScreenState extends State<JoinedScreen> {
 
             // Card for "Confirmed Events"
             Card(
-              elevation: 3,
               child: Container(
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 230, 246, 255),
