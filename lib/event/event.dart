@@ -158,7 +158,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(50),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -179,24 +179,24 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                         )
                       : Icon(
                           Icons.add_a_photo,
-                          size: 30,
+                          size: 25,
                           color: const Color.fromARGB(255, 77, 77, 77),
                         ),
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               const Text(
                 'Event',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    fontSize: 20,
                     color: Color.fromARGB(255, 54, 54, 54)),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
-                height: 20,
+                height: 5,
               ),
               TextFormField(
                 controller: titleController,
@@ -212,7 +212,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 15,
               ),
               TextFormField(
                 controller: detailController,
@@ -228,7 +228,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 15,
               ),
               TextFormField(
                 controller: locationController,
@@ -244,7 +244,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 15,
               ),
               DropdownButton<String>(
                 value: category,
@@ -269,7 +269,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 }).toList(),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               DatePickWidget(
                 onDateTimeSelected: (combinedDate) {
@@ -277,7 +277,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 },
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               TextFormField(
                 controller: entryFeeController,
@@ -294,7 +294,7 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                 },
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Padding(
                 padding: EdgeInsets.only(left: 50, right: 50),

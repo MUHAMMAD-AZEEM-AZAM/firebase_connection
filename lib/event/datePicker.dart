@@ -62,7 +62,6 @@ class _DatePickWidgetState extends State<DatePickWidget> {
               "Select Event Date and Time",
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.black,
               ),
             ),
           ),
