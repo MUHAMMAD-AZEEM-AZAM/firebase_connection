@@ -5,19 +5,21 @@ class MyGridView extends StatelessWidget {
   // Data
   final List<List<dynamic>> category = [
     ['Sports', Icons.sports_baseball_sharp],
-    ['Entertainment', Icons.movie],
+    ['Entertainment', Icons.movie_filter_sharp],
     ['Education', Icons.lightbulb],
     ['Career', Icons.handshake_outlined],
     ['Business', Icons.business_outlined],
-    ['Vacations', Icons.beach_access]
+    ['Vacations', Icons.beach_access],
+    ['Social', Icons.groups],
+    ['Politics', Icons.account_balance_outlined],
   ];
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: EdgeInsets.zero,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // Number of columns in the grid
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4, // Number of columns in the grid
         mainAxisSpacing: 4.0, // Spacing between rows
       ),
       itemCount: category.length,
@@ -49,7 +51,7 @@ class MyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-  elevation: 3.0,
+  elevation: 1.5,
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(15.0),
   ),
@@ -63,13 +65,13 @@ class MyCard extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 20.0,
+          size: 18.0,
           color: const Color.fromARGB(255, 0, 42, 77),
         ),
         SizedBox(height: 4.0),
         Text(
           title,
-          style: TextStyle(fontSize: 12.0),
+          style: TextStyle(fontSize: 10.0),
         ),
       ],
     ),

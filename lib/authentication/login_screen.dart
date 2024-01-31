@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             // Logo (Replace 'lib/Images/Logo.jpg' with the actual path to your image)
             Image.asset(
-              'lib/Images/Logo.jpg',
+              'lib/Images/Logo.png',
               height: 50, // Adjust the height as needed
             ),
             SizedBox(height: 50),

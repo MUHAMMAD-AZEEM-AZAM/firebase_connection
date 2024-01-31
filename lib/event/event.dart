@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_connection/Menu%20bar/created_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_connection/event/datePicker.dart';
@@ -260,7 +259,9 @@ Future<void> initializeLocalNotifications(BuildContext context) async {
                   'Education',
                   'Career',
                   'Business',
-                  'Vacation'
+                  'Vacation',
+                  'Social',
+                  'Politics',
                 ].map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,

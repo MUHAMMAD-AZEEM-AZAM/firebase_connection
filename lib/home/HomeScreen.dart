@@ -99,7 +99,7 @@ class HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.all(10),
             child: SizedBox(
-              height: 250,
+              height: 180,
               child: Center(
                 child: MyGridView(),
               ),

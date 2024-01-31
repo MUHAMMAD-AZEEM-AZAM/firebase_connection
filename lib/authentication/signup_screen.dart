@@ -67,11 +67,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Sign Up',
           style: TextStyle(color: Colors.white),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.blue,
       ),
       backgroundColor: Colors.white,
@@ -84,10 +84,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'lib/Images/Logo.jpg',
               height: 50,
             ),
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue, width: 2.0),
                 ),
@@ -96,11 +96,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue, width: 2.0),
                 ),
                 labelText: 'Password',
@@ -118,10 +118,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               obscureText: !_passwordVisible,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _confirmPasswordController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.blue, width: 2.0),
                 ),
@@ -130,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               obscureText: !_passwordVisible,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () async {
                 String email = _emailController.text;
@@ -183,8 +183,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('SignUp Successful'),
-                      content: Text('Register Now'),
+                      title: const Text('SignUp Successful'),
+                      content: const Text('Register Now'),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -195,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             );
                           },
-                          child: Text('OK'),
+                          child: const Text('OK'),
                         ),
                       ],
                     ),
@@ -212,7 +212,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
               ),
-              child: Text(
+              child: const Text(
                 'Sign Up',
                 style: TextStyle(color: Colors.white),
               ),
@@ -234,7 +234,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),

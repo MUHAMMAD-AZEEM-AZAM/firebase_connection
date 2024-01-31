@@ -76,35 +76,41 @@ class CreatedScreen extends StatelessWidget {
                                               eventId: '${documentSnapshot.id}',
                                             )));
                               },
-                              child: Container(
-                                height: 100,
-                                child: Card(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 80,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                                color: Colors.teal,
-                                                width: 2.0)),
-                                        child: ClipOval(
-                                            child: Image.network(
-                                          documentSnapshot["imageUrl"] == null
-                                              ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                                              : documentSnapshot["imageUrl"],
-                                          fit: BoxFit.cover,
-                                        )),
-                                      ),
-                                      Text(
-                                        documentSnapshot["title"],
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                      Text(documentSnapshot["location"]),
-                                    ],
+                              child: Card(
+                                child: Container(
+                                   decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: Colors.teal,
+                                                  width: 2.0)),
+                                          child: ClipOval(
+                                              child: Image.network(
+                                            documentSnapshot["imageUrl"] == null
+                                                ? 'https://images.pexels.com/photos/3811021/pexels-photo-3811021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                                                : documentSnapshot["imageUrl"],
+                                            fit: BoxFit.cover,
+                                          )),
+                                        ),
+                                        Text(
+                                          documentSnapshot["title"],
+                                          style: TextStyle(color: Colors.blue),
+                                        ),
+                                        Text(documentSnapshot["location"]),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

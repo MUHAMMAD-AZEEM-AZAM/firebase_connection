@@ -28,7 +28,7 @@ class _JoinedScreenState extends State<JoinedScreen> {
             Card(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 230, 246, 255),
+                  color: Color.fromARGB(255, 240, 250, 255),
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Padding(
@@ -40,7 +40,6 @@ class _JoinedScreenState extends State<JoinedScreen> {
                         'Events You Requested',
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 8),
@@ -109,7 +108,7 @@ class _JoinedScreenState extends State<JoinedScreen> {
             Card(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 230, 246, 255),
+                  color: Color.fromARGB(255, 240, 250, 255),
                   borderRadius: BorderRadius.circular(15.0),
                 ),
                 child: Padding(
@@ -121,7 +120,6 @@ class _JoinedScreenState extends State<JoinedScreen> {
                         'Confirmed Events',
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 8),
